@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+<meta charset="UTF-8">
+<title>BattleCoin</title>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<style>
+
+body{
+background:black;
+color:white;
+font-family:Arial;
+text-align:center;
+}
+
+h1{
+color:#ff0000;
+font-size:40px;
+}
+
+#coin{
+font-size:45px;
+color:#00aaff;
+margin:20px;
+}
+
+#battles{
+font-size:20px;
+}
+
+canvas{
+background:#111;
+margin-top:20px;
+}
+
+</style>
+</head>
+
+<body>
+
+<h1>⚔ BattleCoin</h1>
+
+<div id="coin">0.0000</div>
+
+<div id="battles">Batalhas: 0</div>
+
+<canvas id="chart" width="400" height="200"></canvas>
+
+<script>
+
+let coin = 1
+let battles = 0
+
+const ctx = document.getElementById("chart")
+
+const chart = new Chart(ctx, {
+type: "line",
+data: {
+labels: [],
+datasets: [{
+label: "Valor da BattleCoin",
+data: [],
+borderColor: "cyan",
+borderWidth: 2
+}]
+},
+options:{
+animation:false,
+scales:{
+y:{
+beginAtZero:false
+}
+}
+}
+})
+
+function battle(){
+
+let p1 = Math.floor(Math.random()*21)+1
+let p2 = Math.floor(Math.random()*21)+1
+
+let d1 = Math.abs(21-p1)
+let d2 = Math.abs(21-p2)
+
+if(d1 < d2){
+
+coin += 0.01
+
+}else if(d2 < d1){
+
+coin -= 0.01
+
+}
+
+if(coin < 0.01){
+coin = 0.01
+}
+
+battles++
+
+document.getElementById("coin").innerText = coin.toFixed(4)
+document.getElementById("battles").innerText = "Batalhas: " + battles
+
+if(battles % 50 === 0){
+
+chart.data.labels.push(battles)
+
+chart.data.datasets[0].data.push(coin)
+
+chart.update()
+
+}
+
+}
+
+setInterval(()=>{
+
+for(let i=0;i<200;i++){
+battle()
+}
+
+},50)
+
+</script>
+
+</body>
+  </html>
